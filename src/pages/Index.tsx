@@ -1,5 +1,4 @@
 
-import { quizQuestions } from "@/data/quizQuestions";
 import Quiz from "@/components/Quiz";
 
 const Index = () => {
@@ -16,7 +15,7 @@ const Index = () => {
           </p>
         </header>
         
-        <Quiz questions={quizQuestions} />
+        <Quiz />
       </div>
     </div>
   );
