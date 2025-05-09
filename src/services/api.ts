@@ -1,7 +1,7 @@
 
 import { ApiQuestionResponse, AnswerSubmissionRequest, AnswerSubmissionResponse, QuizQuestion } from "@/types/quiz";
 
-const API_BASE_URL = "http://localhost:8000/quiz/api"; // Update with the local API URL
+const API_BASE_URL = "http://localhost:8000/quiz/api";
 
 export const fetchQuizQuestions = async (): Promise<QuizQuestion[]> => {
   try {
@@ -12,7 +12,20 @@ export const fetchQuizQuestions = async (): Promise<QuizQuestion[]> => {
     }
     
     const data: ApiQuestionResponse = await response.json();
-    return data.questions;
+    
+    // Process the questions to extract correct_answer from options
+    const processedQuestions = data.questions.map(question => {
+      // Find the correct option
+      const correctOption = question.options.find(option => option.is_correct === true);
+      const correct_answer = correctOption ? correctOption.option_name : "";
+      
+      return {
+        ...question,
+        correct_answer
+      };
+    });
+    
+    return processedQuestions;
   } catch (error) {
     console.error("Error fetching quiz questions:", error);
     throw error;

@@ -1,14 +1,15 @@
 
 export interface QuizOption {
   option_name: string;
-  options_text: string;
+  option_text: string;
+  is_correct?: boolean;
 }
 
 export interface QuizQuestion {
   id?: number;
   question_text: string;
   options: QuizOption[];
-  correct_answer: string;
+  correct_answer?: string;
 }
 
 export interface QuizState {
