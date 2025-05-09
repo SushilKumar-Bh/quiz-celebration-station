@@ -6,7 +6,7 @@ import { CheckCircle, XCircle } from "lucide-react";
 
 interface QuizResultsProps {
   questions: QuizQuestion[];
-  answers: (number | null)[];
+  answers: (string | null)[];
   score: number;
   onRestart: () => void;
 }
@@ -41,23 +41,23 @@ const QuizResults: React.FC<QuizResultsProps> = ({ questions, answers, score, on
           <div className="space-y-4">
             <h3 className="font-semibold text-lg border-b pb-2">Question Summary</h3>
             {questions.map((q, idx) => (
-              <div key={q.id} className="border-b pb-3">
+              <div key={idx} className="border-b pb-3">
                 <div className="flex items-start">
-                  {answers[idx] === q.correctAnswer ? (
+                  {answers[idx] === q.correct_answer ? (
                     <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
                   ) : (
                     <XCircle className="w-5 h-5 text-red-500 mt-0.5 mr-2 flex-shrink-0" />
                   )}
                   <div>
-                    <p className="font-medium">{q.question}</p>
+                    <p className="font-medium">{q.question_text}</p>
                     <p className="text-sm text-gray-600 mt-1">
-                      Your answer: <span className={answers[idx] === q.correctAnswer ? "text-green-600 font-medium" : "text-red-600 font-medium"}>
-                        {answers[idx] !== null ? q.options[answers[idx]] : "No answer"}
+                      Your answer: <span className={answers[idx] === q.correct_answer ? "text-green-600 font-medium" : "text-red-600 font-medium"}>
+                        {answers[idx] !== null ? answers[idx] : "No answer"}
                       </span>
                     </p>
-                    {answers[idx] !== q.correctAnswer && (
+                    {answers[idx] !== q.correct_answer && (
                       <p className="text-sm text-gray-600">
-                        Correct answer: <span className="text-green-600 font-medium">{q.options[q.correctAnswer]}</span>
+                        Correct answer: <span className="text-green-600 font-medium">{q.correct_answer}</span>
                       </p>
                     )}
                   </div>

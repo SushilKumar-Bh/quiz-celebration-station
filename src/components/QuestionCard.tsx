@@ -11,12 +11,12 @@ import { Check } from "lucide-react";
 
 interface QuestionCardProps {
   question: QuizQuestion;
-  onSubmit: (selectedOption: number) => void;
-  selectedOption: number | null;
+  onSubmit: (selectedOption: string) => void;
+  selectedOption: string | null;
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({ question, onSubmit, selectedOption }) => {
-  const [selectedValue, setSelectedValue] = useState<number | null>(selectedOption);
+  const [selectedValue, setSelectedValue] = useState<string | null>(selectedOption);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const handleSubmit = () => {
@@ -37,13 +37,13 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, onSubmit, selecte
     <Card className="w-full max-w-2xl mx-auto animate-scale-in bg-quiz-card shadow-lg">
       <CardHeader className="bg-quiz-primary text-white rounded-t-lg">
         <CardTitle className="text-xl sm:text-2xl font-bold text-center">
-          {question.question}
+          {question.question_text}
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-6 pb-4">
         <RadioGroup
-          value={selectedValue !== null ? selectedValue.toString() : undefined}
-          onValueChange={(value) => setSelectedValue(parseInt(value))}
+          value={selectedValue !== null ? selectedValue : undefined}
+          onValueChange={(value) => setSelectedValue(value)}
           className="space-y-3"
         >
           {question.options.map((option, index) => (
@@ -51,19 +51,19 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, onSubmit, selecte
               key={index}
               className={cn(
                 "flex items-center space-x-2 border rounded-md p-3 transition-all",
-                selectedValue === index 
+                selectedValue === option.option_name 
                   ? "border-quiz-primary bg-quiz-background" 
                   : "border-gray-200 hover:border-quiz-secondary"
               )}
             >
-              <RadioGroupItem value={index.toString()} id={`option-${index}`} />
+              <RadioGroupItem value={option.option_name} id={`option-${index}`} />
               <Label 
                 htmlFor={`option-${index}`} 
                 className="flex-grow cursor-pointer text-base sm:text-lg"
               >
-                {option}
+                <span className="font-medium mr-2">{option.option_name}:</span> {option.options_text}
               </Label>
-              {selectedValue === index && (
+              {selectedValue === option.option_name && (
                 <Check className="w-5 h-5 text-quiz-primary animate-pulse" />
               )}
             </div>

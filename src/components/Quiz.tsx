@@ -45,15 +45,17 @@ const Quiz: React.FC<QuizProps> = ({ questions: initialQuestions }) => {
     }
   }, [questions]);
   
-  const handleSubmitAnswer = async (selectedOption: number) => {
+  const handleSubmitAnswer = async (selectedOption: string) => {
     if (!questions || questions.length === 0) return;
     
     const currentQuestion = questions[quizState.currentQuestionIndex];
+    const questionId = currentQuestion.id || (quizState.currentQuestionIndex + 1); // Fallback to index+1 if no ID
     
     try {
       // Submit answer to the server
-      const result = await submitAnswer(currentQuestion.id, selectedOption);
-      const isCorrect = result.isCorrect;
+      const result = await submitAnswer(questionId, selectedOption);
+      // Check if the selected option matches the correct answer for this question
+      const isCorrect = selectedOption === currentQuestion.correct_answer;
       
       // Update answers array
       const newAnswers = [...quizState.answers];
