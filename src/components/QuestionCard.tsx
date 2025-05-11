@@ -61,7 +61,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, onSubmit, selecte
                 htmlFor={`option-${index}`} 
                 className="flex-grow cursor-pointer text-base sm:text-lg"
               >
-                <span className="font-medium mr-2">{option.option_name}:</span> {option.option_text || option.options_text}
+                <span className="font-medium mr-2">{option.option_name}:</span> {option.option_text}
               </Label>
               {selectedValue === option.option_name && (
                 <Check className="w-5 h-5 text-quiz-primary animate-pulse" />

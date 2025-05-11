@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { QuizQuestion, QuizState } from "@/types/quiz";
 import QuestionCard from "./QuestionCard";
@@ -8,9 +7,10 @@ import QuizResults from "./QuizResults";
 import { toast } from "sonner";
 import { fetchQuizQuestions, submitAnswer } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
+import { quizQuestions } from "@/data/quizQuestions"; // Import static questions
 
 interface QuizProps {
-  questions?: QuizQuestion[]; // Make optional to allow API fetching
+  questions?: QuizQuestion[];
 }
 
 const Quiz: React.FC<QuizProps> = ({ questions: initialQuestions }) => {
@@ -22,7 +22,7 @@ const Quiz: React.FC<QuizProps> = ({ questions: initialQuestions }) => {
     isCompleted: false
   });
   
-  // Fetch questions from API if not provided as prop
+  // Fetch questions from API with fallback to static questions
   const { 
     data: fetchedQuestions, 
     isLoading, 
@@ -31,9 +31,17 @@ const Quiz: React.FC<QuizProps> = ({ questions: initialQuestions }) => {
     queryKey: ['quizQuestions'],
     queryFn: fetchQuizQuestions,
     enabled: !initialQuestions, // Only fetch if questions weren't provided as props
+    onError: (error) => {
+      console.error("Failed to load questions from API, using static questions instead:", error);
+      toast.error("Failed to load questions from server. Using offline questions instead.", {
+        duration: 3000
+      });
+    }
   });
   
-  const questions = initialQuestions || fetchedQuestions || [];
+  // Use initialQuestions if provided, then fetchedQuestions if API call was successful, 
+  // otherwise fall back to static questions from data folder
+  const questions = initialQuestions || (fetchedQuestions && !error ? fetchedQuestions : quizQuestions);
   
   // Initialize answers array once questions are loaded
   useEffect(() => {
